@@ -1,43 +1,29 @@
 def fib(n):
-
+    
+    # creates empty dict
     d = {}
-
-    # seperate a dict and n
+    
+    # seperate a dict and n if there's already a dict
     if "{" in str(n):
         d = eval(n[n.index("{"):])
         n = int(n[:n.index("{")])
-
-    # if in dict
+        
+    # memoization
     if n in d:
         return str(d[n]) + str(d)
-
-    # 1 or 0
-    if n == 1 or n == 0:
-        d = {n:1}
-        return str(1)+str(d)
-
-
+    
+    # 0 or 1
+    if n == 0 or n == 1:
+        return str(1)+"{0:1,1:1}"
+    
+    
     if n not in d:
-        # get return value from n-1
+        # get return value from n-1 (leftmost branch)
         x = fib(str(n-1)+str(d))
-        xd = eval(x[x.index("{"):])
-        d = xd
-
-        # get return value from n-2
-        y = fib(str(n-2)+str(d))
-
-        #if there are any values that are in x d and y d that you dont have in your d, steal their d's
-
-        xd = eval(x[x.index("{"):])
-        yd = eval(y[y.index("{"):])
-
-        for key in xd:
-            if key not in d:
-                d[key] = xd[key]
-
-        for key in yd:
-            if key not in d:
-                d[key] = yd[key]
-
-        d[n] = int(x[:x.index("{")]) + int(y[:y.index("{")])
+        
+        # change d to x's d
+        d = eval(x[x.index("{"):])
+        
+        # update then return
+        d[n] = d[n-1] + d[n-2]
         return str(d[n])+str(d)
